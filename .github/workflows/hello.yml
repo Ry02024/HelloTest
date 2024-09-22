@@ -1,0 +1,21 @@
+name: Say Hello from GitHub Actions
+
+on:
+  workflow_dispatch:  # 手動でトリガーされる設定
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Say Hello
+        run: echo "hello github" > result.txt  # "hello github"をファイルに出力
+
+      - name: Upload result file
+        uses: actions/upload-artifact@v3       # 最新バージョン (v3) を使用
+        with:
+          name: result
+          path: result.txt
