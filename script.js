@@ -21,16 +21,21 @@ document.getElementById("submit-btn").addEventListener("click", function() {
     .then(response => {
         if (response.ok) {
             document.getElementById("output").textContent = 'GitHub Actionsをトリガーしました。結果を取得しています...';
-            return fetch('https://api.github.com/repos/Ry02024/HelloTest/actions/artifacts', {
-                headers: {
-                    'Authorization': `token ${token}`,  // 同じトークンを使ってアーティファクトを取得
-                    'Accept': 'application/vnd.github.v3+json'
-                }
-            });
+            // ワークフローの実行が完了するまで少し待つ必要があります
+            return new Promise(resolve => setTimeout(resolve, 10000));  // 10秒待機
         } else {
             document.getElementById("output").textContent = 'トークンが無効です。';
             throw new Error('Invalid token');
         }
+    })
+    .then(() => {
+        // アーティファクトを取得
+            return fetch('https://api.github.com/repos/Ry02024/HelloTest/actions/artifacts', {
+            headers: {
+                'Authorization': `token ${token}`,  // 同じトークンを使ってアーティファクトを取得
+                'Accept': 'application/vnd.github.v3+json'
+            }
+        });
     })
     .then(response => response.json())
     .then(data => {
